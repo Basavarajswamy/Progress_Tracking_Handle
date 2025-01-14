@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+</head>
+
+<body>
+    <h1>Welcome to Admin Dashboard</h1>
+    <h2>All Progress Data</h2>
+    <ul>
+        <% progresses.forEach(progress=> { %>
+            <li>
+                <%= progress.user %>: <%= progress.task %> - <%= progress.completed ? "Completed" : "Pending" %>
+            </li>
+            <% }); %>
+    </ul>
+
+    <h2>Admin Actions</h2>
+    <ul>
+        <li><a href="/admin/users">Manage Users</a></li>
+    </ul>
+</body>
+
+</html>
