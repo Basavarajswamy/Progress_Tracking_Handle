@@ -34,21 +34,30 @@ router.get("/login", (req, res) => {
 // Handle user login
 router.post("/login", async (req, res) => {
   try {
+    console.log("POST /auth/login hit"); // Log when the route is hit
     const { email, password } = req.body;
+
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).send("User not found!");
+    if (!user) {
+      console.log("User not found!");
+      return res.status(404).send("User not found!");
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).send("Invalid credentials!");
+    if (!isMatch) {
+      console.log("Invalid credentials!");
+      return res.status(401).send("Invalid credentials!");
+    }
 
     const token = jwt.sign(
-      { id: user._id, role: user.role }, // Include role in the token
+      { id: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
+
     res.cookie("token", token, { httpOnly: true });
     console.log("Cookie set with token:", token);
-    res.redirect("/progress/add"); // Redirect to the progress-tracking page after login
+    res.redirect("/progress/add");
   } catch (error) {
     console.error("Login error:", error);
     res.status(400).send("Login failed!");

@@ -105,6 +105,9 @@
             border-radius: 5px;
             opacity: 0;
             animation: fadeInUp 0.8s ease-in forwards;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         @keyframes fadeInUp {
@@ -170,6 +173,51 @@
             /* Slight zoom on hover */
         }
 
+        .delete-button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .delete-button:hover {
+            background-color: #ff1a1a;
+            transform: scale(1.05);
+            /* Slight zoom on hover */
+        }
+
+        .history-button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: block;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .history-button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .home-icon {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 2rem;
+            color: #4caf50;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
         footer {
             margin-top: 20px;
             text-align: center;
@@ -181,6 +229,7 @@
 </head>
 
 <body>
+    <a href="/" class="home-icon">🏠</a>
     <header>
         <h1>Progress Tracker</h1>
     </header>
@@ -198,6 +247,9 @@
                     <% completedTasks.forEach(task=> { %>
                         <li class="completed">
                             <%= task.task %> - Completed
+                                <form action="/progress/delete/<%= task._id %>" method="POST" style="display:inline;">
+                                    <button type="submit" class="delete-button">Delete</button>
+                                </form>
                         </li>
                         <% }) %>
                 </ul>
@@ -212,6 +264,10 @@
                                 <% notCompletedTasks.forEach(task=> { %>
                                     <li class="not-completed">
                                         <%= task.task %> - Pending
+                                            <form action="/progress/delete/<%= task._id %>" method="POST"
+                                                style="display:inline;">
+                                                <button type="submit" class="delete-button">Delete</button>
+                                            </form>
                                     </li>
                                     <% }) %>
                             </ul>
@@ -227,6 +283,10 @@
 
                                     <button type="submit">Add Task</button>
                                 </form>
+
+                                <!-- History Button -->
+                                <a href="/progress/all" class="history-button">View History</a>
+                               
     </div>
 
     <footer>

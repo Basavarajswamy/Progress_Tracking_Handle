@@ -5,23 +5,169 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        h1,
+        h2 {
+            color: #ffffff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #333;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #1e1e1e;
+        }
+
+        .delete-button,
+        .undo-button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover,
+        .undo-button:hover {
+            background-color: #ff1a1a;
+        }
+
+        .undo-button {
+            background-color: #4caf50;
+        }
+
+        .undo-button:hover {
+            background-color: #45a049;
+        }
+
+        .home-icon {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 2rem;
+            color: #4caf50;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .nav-button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: block;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .nav-button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 
 <body>
+    <a href="/" class="home-icon">🏠</a>
     <h1>Welcome to Admin Dashboard</h1>
     <h2>All Progress Data</h2>
-    <ul>
-        <% progresses.forEach(progress=> { %>
-            <li>
-                <%= progress.user %>: <%= progress.task %> - <%= progress.completed ? "Completed" : "Pending" %>
-            </li>
-            <% }); %>
-    </ul>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Task</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% let currentUser=null; %>
+                <% progresses.forEach(progress=> { %>
+                    <% if (currentUser !==progress.user) { %>
+                        <% if (currentUser !==null) { %>
+        </tbody>
+        <% } %>
+            <tr>
+                <td rowspan="<%= progresses.filter(p => p.user === progress.user).length %>">
+                    <%= progress.user %>
+                </td>
+                <td>
+                    <%= progress.task %>
+                </td>
+                <td>
+                    <%= progress.completed ? "Completed" : "Pending" %>
+                </td>
+                <td>
+                    <form action="/progress/delete/<%= progress._id %>" method="POST" style="display:inline;">
+                        <button type="submit" class="delete-button">Delete</button>
+                    </form>
+                    <!-- <form action="/progress/undo/<%= progress._id %>" method="POST" style="display:inline;">
+                        <button type="submit" class="undo-button">Undo</button>
+                    </form> -->
+                </td>
+            </tr>
+            <% currentUser=progress.user; %>
+                <% } else { %>
+                    <tr>
+                        <td>
+                            <%= progress.task %>
+                        </td>
+                        <td>
+                            <%= progress.completed ? "Completed" : "Pending" %>
+                        </td>
+                        <td>
+                            <form action="/progress/delete/<%= progress._id %>" method="POST" style="display:inline;">
+                                <button type="submit" class="delete-button">Delete</button>
+                            </form>
+                            <!-- <form action="/progress/undo/<%= progress._id %>" method="POST" style="display:inline;">
+                                <button type="submit" class="undo-button">Undo</button>
+                            </form> -->
+                        </td>
+                    </tr>
+                    <% } %>
+                        <% }); %>
+                            </tbody>
+    </table>
 
     <h2>Admin Actions</h2>
     <ul>
-        <li><a href="/admin/users">Manage Users</a></li>
+        <li><a href="/admin/users" style="color: #4caf50;">Manage Users</a></li>
     </ul>
+
+    <!-- Navigation Buttons -->
+    <a href="/" class="nav-button">Home</a>
+    <a href="/progress/add" class="nav-button">Add Progress</a>
 </body>
 
 </html>
